@@ -16,16 +16,21 @@ import java.util.List;
  */
 class ContentAdapter extends PagerAdapter {
 
-  private final List<Section> mSections = new ArrayList<>();
+  private final List<Section> mSubsections = new ArrayList<>();
   private final LayoutInflater mInflater;
 
-  ContentAdapter(Context context, List<Section> sections) {
-    mSections.addAll(sections);
+  ContentAdapter(Context context) {
     mInflater = LayoutInflater.from(context);
   }
 
+  void setSubsections(List<Section> subsections) {
+    mSubsections.clear();
+    mSubsections.addAll(subsections);
+    notifyDataSetChanged();
+  }
+
   @Override public int getCount() {
-    return mSections.size();
+    return mSubsections.size();
   }
 
   @Override public boolean isViewFromObject(View view, Object object) {
@@ -35,9 +40,22 @@ class ContentAdapter extends PagerAdapter {
   @Override public Object instantiateItem(ViewGroup container, int position) {
     SectionItemsView contentView =
         (SectionItemsView) mInflater.inflate(R.layout.content_layout, container, false);
-    contentView.bindData(mSections.get(position));
+    Section subsection = mSubsections.get(position);
+    contentView.bindData(subsection);
+    contentView.setTag(subsection);
     container.addView(contentView);
     return contentView;
+  }
+
+  @Override public int getItemPosition(Object object) {
+    int position = POSITION_NONE;
+    if (object instanceof View) {
+      View view = (View) object;
+      Section subsection = (Section) view.getTag();
+      int index = mSubsections.indexOf(subsection);
+      position = index >= 0 ? index : POSITION_NONE;
+    }
+    return position;
   }
 
   @Override public void destroyItem(ViewGroup container, int position, Object object) {
@@ -47,6 +65,6 @@ class ContentAdapter extends PagerAdapter {
   }
 
   @Override public CharSequence getPageTitle(int position) {
-    return mSections.get(position).name;
+    return mSubsections.get(position).name;
   }
 }

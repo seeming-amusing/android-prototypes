@@ -30,6 +30,7 @@ public class TabsActivity extends AppCompatActivity {
   @BindView(R.id.content_menu_items) ViewPager mContent;
 
   private final List<Section> mSections = new ArrayList<>();
+  private ContentAdapter mContentAdapter;
   private String[] mBackgroundColors;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +56,6 @@ public class TabsActivity extends AppCompatActivity {
     mSectionsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
       @Override
       public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        displaySubsectionTabsFor(position);
         displaySubsectionContentsFor(position);
       }
 
@@ -70,28 +70,25 @@ public class TabsActivity extends AppCompatActivity {
   }
 
   private void initializeContent() {
+    mContentAdapter = new ContentAdapter(this);
+    mContent.setAdapter(mContentAdapter);
     mContent.setOffscreenPageLimit(2);
-  }
-
-  private void displaySubsectionTabsFor(int position) {
-    mSubsectionTabs.removeAllTabs();
-    List<Section> subsections = getSections().get(position).subsections;
-    if (subsections.size() > 1) {
-      mSubsectionTabs.setVisibility(View.VISIBLE);
-      for (Section subsection : subsections) {
-        TabLayout.Tab tab = mSubsectionTabs.newTab();
-        tab.setText(subsection.name);
-        mSubsectionTabs.addTab(tab);
-      }
-    } else {
-      mSubsectionTabs.setVisibility(View.GONE);
-    }
   }
 
   private void displaySubsectionContentsFor(int position) {
     List<Section> subsections = getSections().get(position).subsections;
-    mContent.setAdapter(new ContentAdapter(this, subsections));
+    mContentAdapter.setSubsections(subsections);
     mContent.setBackgroundColor(getBackgroundColorAt(position));
+    displaySubsectionTabsFor(subsections);
+  }
+
+  private void displaySubsectionTabsFor(List<Section> subsections) {
+    if (subsections.size() > 1) {
+      mSubsectionTabs.setVisibility(View.VISIBLE);
+      mContent.setCurrentItem(0);
+    } else {
+      mSubsectionTabs.setVisibility(View.GONE);
+    }
   }
 
   private int getBackgroundColorAt(int position) {
