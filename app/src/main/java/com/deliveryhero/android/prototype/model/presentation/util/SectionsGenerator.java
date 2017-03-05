@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static com.deliveryhero.android.prototype.data.util.RandomObjectGenerator.generateRandomStrings;
+import static com.deliveryhero.android.prototype.data.util.RandomObjectGenerator.INSTANCE;
 
 /**
  * Generates {@link Section} objects for consumption. This may be used by any prototype project to
@@ -18,11 +18,11 @@ public final class SectionsGenerator {
   }
 
   public static List<Section> generateSections(int number) {
-    List<String> sectionIds = generateRandomStrings(number, number);
+    List<String> sectionIds = INSTANCE.generateRandomStrings(number, number);
     List<Section> sections = new ArrayList<>(sectionIds.size());
     for (int i = 0; i < sectionIds.size(); i++) {
       String sectionId = "[SEC" + (i + 1) + "]";
-      List<String> subsections = generateRandomStrings(1, 5);
+      List<String> subsections = INSTANCE.generateRandomStrings(1, 5);
       String sectionName =
           sectionId + " " + sectionIds.get(i).substring(0, 8) + " (" + subsections.size() + ")";
       sections.add(generateSection(sectionId, sectionName, subsections, null));
@@ -41,7 +41,7 @@ public final class SectionsGenerator {
         String subsectionId =
             sectionId + ":[" + (i + 1) + "] " + subsections.get(i).substring(0, endIndex);
         section.addSubsection(
-            generateSection(subsectionId, subsectionId, null, generateRandomStrings(15, 20)));
+            generateSection(subsectionId, subsectionId, null, INSTANCE.generateRandomStrings(15, 20)));
       }
     }
     return section;
