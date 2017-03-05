@@ -16,7 +16,7 @@ import com.deliveryhero.android.prototype.model.presentation.Section;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.deliveryhero.android.prototype.model.presentation.util.SectionsGenerator.generateSections;
+import static com.deliveryhero.android.prototype.model.presentation.util.SectionsGenerator.INSTANCE;
 
 /**
  * View(-ish) implementation used to handle the UI logic connecting each view component. The core
@@ -76,7 +76,7 @@ public class TabsActivity extends AppCompatActivity {
   }
 
   private void displaySubsectionContentsFor(int position) {
-    List<Section> subsections = getSections().get(position).subsections;
+    List<Section> subsections = getSections().get(position).getSubsections();
     mContentAdapter.setSubsections(subsections);
     mContent.setBackgroundColor(getBackgroundColorAt(position));
     displaySubsectionTabsFor(subsections);
@@ -98,7 +98,7 @@ public class TabsActivity extends AppCompatActivity {
 
   private List<Section> getSections() {
     if (mSections.isEmpty()) {
-      mSections.addAll(generateSections(6));
+      mSections.addAll(INSTANCE.generateSections(6));
     }
     return mSections;
   }

@@ -65,6 +65,6 @@ class ContentAdapter extends PagerAdapter {
   }
 
   @Override public CharSequence getPageTitle(int position) {
-    return mSubsections.get(position).name;
+    return mSubsections.get(position).getName();
   }
 }

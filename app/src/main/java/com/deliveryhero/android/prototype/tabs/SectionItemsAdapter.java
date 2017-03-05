@@ -43,14 +43,14 @@ class SectionItemsAdapter extends RecyclerView.Adapter<SectionItemsAdapter.Holde
 
   private String getTextFor(int position) {
     if (position == 0) {
-      return mSection.description;
+      return mSection.getDescription();
     } else {
-      return mSection.items.get(position - 1);
+      return mSection.getItems().get(position - 1);
     }
   }
 
   @Override public int getItemCount() {
-    return mSection.items.size() + 1;
+    return mSection.getItems().size() + 1;
   }
 
   /**
