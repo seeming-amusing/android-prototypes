@@ -13,19 +13,11 @@ object RandomObjectGenerator {
 
     val RANDOM_ID_GENERATOR = SecureRandom()
 
-    fun generateForId(id: String): RandomObject {
-        val name = "Random $id"
-        val bannerUrl = "http://example.com/$id.jpg"
-        return RandomObject(id, name, bannerUrl, "Lorem ipsum", generateRandomStrings())
-    }
+    fun generateForId(id: String) = RandomObject(id, "Random $id", "http://example.com/$id.jpg",
+            "Lorem ipsum", generateRandomStrings())
 
-    @JvmOverloads fun generateRandomStrings(min: Int = 4, max: Int = 10): List<String> {
-        val count = when {
-            min < max -> Random().nextInt(max - min) + min
-            else -> max
-        }
-        return (0..count)
-                .map { BigInteger(130, RANDOM_ID_GENERATOR).toString(24) }
-                .toList()
-    }
+    @JvmOverloads fun generateRandomStrings(min: Int = 4, max: Int = 10): List<String> = when {
+        min < max -> Random().nextInt(max - min) + min
+        else -> max
+    }.let { count -> (0..count).map { BigInteger(130, RANDOM_ID_GENERATOR).toString(24) } }
 }
